@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YBG Dashboard V2 | Kocaeli Mobilya</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xm,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a252f'/><text x='50' y='68' font-family='Arial, sans-serif' font-size='45' font-weight='bold' fill='%23d35400' text-anchor='middle'>KM</text></svg>">
+    <style>
+        :root { --primary: #1a252f; --accent: #d35400; --bg: #f4f7f6; --white: #ffffff; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--primary); }
+        
+        .header { background: var(--primary); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+        
+        /* Kart Tasarımı */
+        .card { background: var(--white); border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .card h2 { margin-top: 0; font-size: 20px; border-bottom: 2px solid var(--bg); padding-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        /* Form */
+        .upload-form { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; align-items: end; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; outline: none; font-family: inherit; }
+        input:focus { border-color: var(--accent); }
+        .btn { background: var(--accent); color: white; border: none; padding: 13px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 100%; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-delete { background: #e74c3c; padding: 8px; font-size: 12px; }
+
+        /* Galeri Listesi */
+        .gallery-admin-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; margin-top: 20px; }
+        .gallery-item-admin { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #eee; }
+        .gallery-item-admin img { width: 100%; height: 120px; object-fit: cover; }
+        .item-info { padding: 8px; font-size: 12px; text-align: center; background: #fff; }
+        .delete-overlay { position: absolute; top: 5px; right: 5px; }
+
+        /* Mobil */
+        @media (max-width: 768px) {
+            .upload-form { grid-template-columns: 1fr; }
+            .header h1 { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1><i class="fas fa-tools"></i> Kocaeli Mobilya Yönetim</h1>
+    <button onclick="logout()" class="btn" style="width: auto; background: #444;">Çıkış Yap</button>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h2><i class="fas fa-plus"></i> Yeni Fotoğraf Ekle</h2>
+        <div class="upload-form">
+            <div>
+                <label>Fotoğraf Seç</label>
+                <input type="file" id="imgInp" accept="image/*">
+            </div>
+            <div>
+                <label>Kategori</label>
+                <select id="catSel">
+                    <option value="mutfak">Mutfak Dolabı</option>
+                    <option value="banyo">Banyo Dolabı</option>
+                    <option value="vestiyer">Vestiyer</option>
+                    <option value="yatak">Yatak Odası</option>
+                </select>
+            </div>
+            <button onclick="handleUpload()" class="btn" id="upBtn">Sisteme Yükle</button>
+        </div>
+        <div id="log" style="margin-top:15px; font-size:14px; font-weight:bold;"></div>
+    </div>
+
+    <div class="card">
+        <h2><i class="fas fa-th-large"></i> Galeriyi Yönet (Sil/Düzenle)</h2>
+        <div class="gallery-admin-list" id="adminList">
+            <p>Yükleniyor...</p>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { db, auth } from "../js/firebase-config.js";
+    import { doc, onSnapshot, setDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const adminList = document.getElementById('adminList');
+    const log = document.getElementById('log');
+
+    // Oturum Kontrolü
+    onAuthStateChanged(auth, user => { if(!user) window.location.href="index.html"; });
+
+    // 1. GALERİYİ CANLI LİSTELE VE SİLME BUTONLARINI HAZIRLA
+    onSnapshot(doc(db, "siteData", "gallery"), (snapshot) => {
+        if (!snapshot.exists()) { adminList.innerHTML = "Henüz fotoğraf yok."; return; }
+        const items = snapshot.data().items || [];
+        adminList.innerHTML = "";
+        
+        items.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = "gallery-item-admin";
+            div.innerHTML = `
+                <img src="${item.src}">
+                <div class="item-info"><strong>${item.category}</strong></div>
+                <div class="delete-overlay">
+                    <button class="btn btn-delete" onclick="deleteImg('${item.src}', '${item.category}', ${item.timestamp})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            adminList.appendChild(div);
+        });
+    });
+
+    // 2. FOTOĞRAF EKLEME FONKSİYONU (BASE64)
+    window.handleUpload = async () => {
+        const file = document.getElementById('imgInp').files[0];
+        const cat = document.getElementById('catSel').value;
+        const btn = document.getElementById('upBtn');
+
+        if(!file) return alert("Lütfen resim seçin!");
+        
+        btn.disabled = true;
+        log.innerText = "Resim işleniyor...";
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+            const base64 = reader.result;
+            try {
+                const ref = doc(db, "siteData", "gallery");
+                // setDoc + merge: true sayesinde döküman yoksa oluşturur
+                await setDoc(ref, {
+                    items: arrayUnion({ src: base64, category: cat, timestamp: Date.now() })
+                }, { merge: true });
+                log.innerHTML = "<span style='color:green;'>✅ Yüklendi!</span>";
+                document.getElementById('imgInp').value = "";
+            } catch (e) { log.innerText = "Hata: " + e.message; }
+            btn.disabled = false;
+        };
+    };
+
+    // 3. FOTOĞRAF SİLME FONKSİYONU
+    window.deleteImg = async (src, category, timestamp) => {
+        if(!confirm("Bu fotoğrafı silmek istediğinize emin misiniz?")) return;
+        try {
+            const ref = doc(db, "siteData", "gallery");
+            await setDoc(ref, {
+                items: arrayRemove({ src, category, timestamp })
+            }, { merge: true });
+            alert("Silindi!");
+        } catch (e) { alert("Hata: " + e.message); }
+    };
+
+    window.logout = () => signOut(auth);
+</script>
+</body>
+</html>

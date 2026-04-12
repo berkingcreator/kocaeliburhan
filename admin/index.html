@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Girişi | Kocaeli Mobilya Montaj</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xm,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a252f'/><text x='50' y='68' font-family='Arial, sans-serif' font-size='45' font-weight='bold' fill='%23d35400' text-anchor='middle'>KM</text></svg>">
+    <style>
+        :root {
+            --primary: #1a252f;
+            --accent: #d35400;
+            --bg: #f0f2f5;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-login {
+            width: 100%;
+            background-color: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #e67e22;
+        }
+
+        #errorMessage {
+            color: #e74c3c;
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            display: none; /* Başlangıçta gizli */
+        }
+
+        .ybg-signature {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #999;
+        }
+        .ybg-signature span {
+            font-weight: 700;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="logo">KOCAELİ <span>MOBİLYA</span></div>
+        <div class="subtitle">Yönetim Paneline Giriş Yapın</div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" placeholder="E-Posta Adresi" required>
+            </div>
+            
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Şifre" required>
+            </div>
+
+            <button type="submit" class="btn-login" id="loginBtn">Giriş Yap</button>
+        </form>
+
+        <div id="errorMessage"><i class="fas fa-exclamation-triangle"></i> Hatalı e-posta veya şifre!</div>
+
+        <div class="ybg-signature">Powered by <span>YBG13™</span></div>
+    </div>
+
+    <script type="module">
+        import { auth } from "../js/firebase-config.js";
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorMessage = document.getElementById('errorMessage');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Sayfanın yenilenmesini durdur
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Butonu yükleniyor moduna al
+            loginBtn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Bekleniyor...";
+            loginBtn.style.backgroundColor = "#95a5a6";
+            errorMessage.style.display = "none";
+
+            try {
+                // Firebase'e sor
+                await signInWithEmailAndPassword(auth, email, password);
+                
+                // Başarılıysa butonu yeşil yap ve panele at
+                loginBtn.innerHTML = "<i class='fas fa-check'></i> Başarılı!";
+                loginBtn.style.backgroundColor = "#2ecc71";
+                
+                setTimeout(() => {
+                    window.location.href = "panel.html";
+                }, 1000);
+
+            } catch (error) {
+                // Hata varsa mesajı göster ve butonu eski haline getir
+                console.error(error);
+                errorMessage.style.display = "block";
+                loginBtn.innerHTML = "Giriş Yap";
+                loginBtn.style.backgroundColor = "var(--accent)";
+            }
+        });
+    </script>
+
+</body>
+</html>

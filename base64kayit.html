@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YBG13™ - Firebase Foto Yükleyici</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #f4f4f4; margin: 0; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
+        #preview { width: 200px; height: 200px; object-fit: cover; border-radius: 8px; display: none; margin-bottom: 15px; border: 2px solid #ddd; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        button:disabled { background: #ccc; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h3>Fotoğraf Seç ve Yükle</h3>
+        <img id="preview" src="#" alt="Önizleme">
+        <br>
+        <input type="file" id="fileInput" accept="image/*">
+        <br>
+        <button id="uploadBtn" disabled>Firebase'e Gönder</button>
+        <p id="status"></p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getStorage, ref, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+        // Senin Konfigürasyonun
+        const firebaseConfig = {
+            apiKey: "AIzaSyC73wHBoQ65yeMihbX4NtDLwEcXv817OIE",
+            authDomain: "kocaeli-13e79.firebaseapp.com",
+            projectId: "kocaeli-13e79",
+            storageBucket: "kocaeli-13e79.firebasestorage.app",
+            messagingSenderId: "133039061602",
+            appId: "1:133039061602:web:8b483081bdbc1f2dd5af3b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
+
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const preview = document.getElementById('preview');
+        const status = document.getElementById('status');
+
+        let base64Image = ""; // Seçilen fotonun base64 hali burada duracak
+
+        // 1. Galeriden Foto Seçme ve Önizleme
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    base64Image = event.target.result; // İşte Base64 verisi burada
+                    preview.src = base64Image;
+                    preview.style.display = "block";
+                    uploadBtn.disabled = false;
+                    status.innerText = "Fotoğraf hazır, yükleyebilirsin.";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 2. Firebase'e Yükleme
+        uploadBtn.addEventListener('click', async () => {
+            try {
+                uploadBtn.disabled = true;
+                status.innerText = "Yükleniyor... Bekle bro.";
+
+                const fileName = "galeri_" + Date.now() + ".png";
+                const storageRef = ref(storage, 'galerim/' + fileName);
+
+                // Base64 formatında yükle
+                const snapshot = await uploadString(storageRef, base64Image, 'data_url');
+                const downloadURL = await getDownloadURL(snapshot.ref);
+
+                console.log("Yüklendi! Link:", downloadURL);
+                status.innerHTML = `Başarılı! <br><a href="${downloadURL}" target="_blank">Resmi Gör</a>`;
+            } catch (error) {
+                console.error(error);
+                status.innerText = "Hata oluştu, konsola bak.";
+                uploadBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

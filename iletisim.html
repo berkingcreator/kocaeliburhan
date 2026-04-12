@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kocaeli Mobilya Montaj iletişim bilgileri ve adres haritası. Bize ulaşın.">
+    <title>İletişim | Kocaeli Mobilya Montaj</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="Kocaeli'de evinize özel ölçü mutfak dolabı, banyo dolabı, vestiyer ve yatak odası imalatı. Kocaeli Mobilya Montaj ile ücretsiz keşif ve fiyat alın.">
+    <meta name="keywords" content="kocaeli mobilya, özel ölçü mobilya, kocaeli mutfak dolabı, izmit mobilya imalat, banyo dolabı, vestiyer, yatak odası takımı, mobilya montaj, ray dolap">
+    <meta name="author" content="YBG13™">
+    
+    <meta property="og:title" content="Kocaeli Mobilya Montaj | Özel Ölçü İmalat">
+    <meta property="og:description" content="Standartlara bağlı kalmayın. Mekanınıza özel, kaliteli ve güvenilir mobilya imalatı.">
+    <meta property="og:type" content="website">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a252f'/><text x='50' y='68' font-family='Arial, sans-serif' font-size='45' font-weight='bold' fill='%23d35400' text-anchor='middle'>KM</text></svg>">
+    <style>
+        /* İletişim Sayfası Özel Tasarımı */
+        .page-header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 50px;
+        }
+        .page-header h1 { font-size: 36px; color: var(--accent-color); }
+
+        .contact-container {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        /* Sol Taraf: İletişim Bilgileri */
+        .contact-info {
+            flex: 1;
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .contact-info h2 { color: var(--primary-color); margin-bottom: 20px; }
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .info-item i {
+            font-size: 24px;
+            color: var(--accent-color);
+            width: 40px;
+        }
+
+        /* Sağ Taraf: WhatsApp Formu */
+        .contact-form {
+            flex: 1;
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .contact-form h2 { color: var(--primary-color); margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: var(--font-main);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--accent-color);
+        }
+        .btn-whatsapp-send {
+            background-color: #25d366;
+            color: #fff;
+            border: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.3s;
+        }
+        .btn-whatsapp-send:hover { background-color: #1ebe57; }
+
+        /* Alt Taraf: Harita */
+        .map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 80px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .contact-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+   <header class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                KOCAELİ <span>MOBİLYA</span>
+            </a>
+            
+            <div class="menu-toggle" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="index.html" class="active">Ana Sayfa</a></li>
+                    <li><a href="hizmetler.html">Hizmetlerimiz</a></li>
+                    <li><a href="galeri.html">Galeri</a></li>
+                    <li><a href="iletisim.html" class="btn-primary-small">İletişim</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section class="page-header">
+        <div class="container">
+            <h1>Bize Ulaşın</h1>
+            <p>Hayalinizdeki mobilya için ücretsiz ölçü ve fiyat teklifi alın.</p>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="contact-container">
+            
+            <div class="contact-info">
+                <h2>İletişim Bilgilerimiz</h2>
+                <p style="margin-bottom: 30px; color: #666;">İmalat, montaj veya özel ölçü siparişleriniz için bize aşağıdaki kanallardan ulaşabilirsiniz.</p>
+                
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <strong>Telefon</strong><br>
+                        0533 127 39 20
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <strong>E-Posta</strong><br>
+                        Koltuksefasi75@gmail.com
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <strong>Adres</strong><br>
+                        Kocaeli, Türkiye (Atölye)
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h2>Hızlı Fiyat Teklifi Al</h2>
+                <form id="waForm" onsubmit="sendToWhatsApp(event)">
+                    <div class="form-group">
+                        <label for="adSoyad">Adınız Soyadınız</label>
+                        <input type="text" id="adSoyad" required placeholder="Örn: Ahmet Yılmaz">
+                    </div>
+                    <div class="form-group">
+                        <label for="mesaj">Mesajınız / İsteğiniz</label>
+                        <textarea id="mesaj" rows="4" required placeholder=""></textarea>
+                    </div>
+                    <button type="submit" class="btn-whatsapp-send">
+                        <i class="fab fa-whatsapp" style="font-size: 20px;"></i> WhatsApp ile Gönder
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+     <div class="map-container">
+    <iframe 
+  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.501103683946!2d29.962090999999997!3d40.706984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cadf581969d5f9%3A0xbd350784613516ab!2zS09DQUVMxLAgTU9CxLBMWUEgTU9OVEFKIEjEsFpNRVRMRVLEsA!5e0!3m2!1str!2str!4v1776008880500!5m2!1str!2str" 
+  width="600" 
+  height="450" 
+  style="border:0;" 
+  allowfullscreen="" 
+  loading="lazy" 
+  referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+
+</div>
+    </section>
+
+    <footer id="iletisim-footer">
+        <div class="container footer-content">
+            <div class="footer-info">
+                <h3>KOCAELİ MOBİLYA</h3>
+                <p>Mekanınıza özel, kaliteli ve güvenilir mobilya imalatı.</p>
+            </div>
+            <div class="footer-contact">
+                <p><i class="fas fa-map-marker-alt"></i> Kocaeli, Türkiye</p>
+                <p><i class="fas fa-phone"></i> 0533 127 39 20</p>
+                <p><i class="fas fa-envelope"></i> Koltuksefasi75@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Kocaeli Mobilya Montaj. Tüm Hakları Saklıdır. | Powered by <span><a href="https://www.ybg13.com" target="_blank" style="color: var(--accent-color); font-weight: 700; text-decoration: none;">YBG13™</a></span></p>
+        </div>
+    </footer>
+
+
+    <script>
+        function sendToWhatsApp(event) {
+            event.preventDefault(); // Sayfanın yenilenmesini engeller
+            
+            const ad = document.getElementById('adSoyad').value;
+            const mesaj = document.getElementById('mesaj').value;
+            
+            // WhatsApp metnini oluştur (Boşluklar ve satır atlamaları URL formatına çevrilir)
+            const waMesaj = `Merhaba, ben ${ad}. %0A%0A${mesaj}`;
+            
+            // Telefon numarasına yönlendir
+            const waURL = `https://wa.me/905331273920?text=${waMesaj}`;
+            window.open(waURL, '_blank');
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinks = document.getElementById('nav-links');
+
+            if (mobileMenu && navLinks) {
+                mobileMenu.addEventListener('click', () => {
+                    // Sınıfı ekle/çıkar (Menüyü sağdan kaydırır)
+                    navLinks.classList.toggle('mobile-active');
+                    
+                    // İkonu değiştir
+                    const icon = mobileMenu.querySelector('i');
+                    if (navLinks.classList.contains('mobile-active')) {
+                        icon.className = 'fas fa-times'; // Çarpı yap
+                    } else {
+                        icon.className = 'fas fa-bars'; // Menü çizgisi yap
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
