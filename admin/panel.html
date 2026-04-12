@@ -77,6 +77,28 @@
     </div>
 </div>
 
+<style>
+    body { display: none; } 
+</style>
+
+<script type="module">
+    import { auth } from "../js/firebase-config.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    // GÜVENLİK GARDİYANI BAŞLADI
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // Kullanıcı giriş yapmış! İçeriği göster.
+            document.body.style.display = "block";
+            console.log("Güvenli oturum açıldı:", user.email);
+        } else {
+            // Kullanıcı giriş yapmamış! Hemen giriş sayfasına kov.
+            console.warn("Yetkisiz erişim engellendi! Giriş sayfasına yönlendiriliyorsunuz...");
+            window.location.href = "index.html"; 
+        }
+    });
+</script>
+    
 <script type="module">
     import { db, auth } from "../js/firebase-config.js";
     import { doc, onSnapshot, setDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
